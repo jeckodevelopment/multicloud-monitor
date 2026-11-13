@@ -1,16 +1,16 @@
 {
   "format": "azure-feed-v1",
   "source": "https://rssfeed.azure.status.microsoft/en-us/status/feed/",
-  "latest": "2026-11-13T11:58:46Z",
-  "fetched_at": "2026-11-13T11:58:46Z",
+  "latest": "2026-11-13T12:00:47Z",
+  "fetched_at": "2026-11-13T12:00:47Z",
   "latest_feed_count": 0,
   "feed_status": "ok_empty",
   "history_status": "ok",
-  "history_latest_count": 11,
+  "history_latest_count": 2,
   "history_source": "https://azure.status.microsoft/en-us/status/history",
-  "history_seed_imported": 9,
-  "history_seed_failures": 1,
-  "history_seed_total": 10,
+  "history_seed_imported": 0,
+  "history_seed_failures": 0,
+  "history_seed_total": 9,
   "items": [
     {
       "id": "pir:7Q30-010",
