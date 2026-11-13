@@ -1,0 +1,15 @@
+{
+  "comment": "Tracking IDs found in public references. Actual incident data is fetched exclusively from the official Microsoft Azure status history page; no third-party incident content is imported.",
+  "tracking_ids": [
+    "ZJV6-SGG",
+    "GHRP-84G",
+    "5GP8-W0G",
+    "8GCS-858",
+    "_SVS-5_G",
+    "FNJ8-VQZ",
+    "YKYN-BWZ",
+    "QNBQ-5W8",
+    "1K80-N_8",
+    "XM22-5_G"
+  ]
+}
