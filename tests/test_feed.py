@@ -15,6 +15,13 @@ class FeedParsingTests(unittest.TestCase):
         self.assertTrue(result[0]["germany"])
         self.assertEqual(result[0]["when"], "2026-11-13T08:00:00Z")
 
+    def test_empty_rss_is_valid(self):
+        self.assertEqual(parse_feed(b"<rss><channel><title>Azure Status</title></channel></rss>"), [])
+
+    def test_unexpected_xml_is_rejected(self):
+        with self.assertRaises(RuntimeError):
+            parse_feed(b"<html><body>Temporary page</body></html>")
+
     def test_unlocalized_event_not_attributed(self):
         xml = b"<rss><channel><item><title>Global event</title><guid>g2</guid></item></channel></rss>"
         item = parse_feed(xml)[0]
