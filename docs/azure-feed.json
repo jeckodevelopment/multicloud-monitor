@@ -1,9 +1,41 @@
 {
   "format": "azure-feed-v1",
   "source": "https://rssfeed.azure.status.microsoft/en-us/status/feed/",
-  "latest": "2026-11-13T11:08:22Z",
-  "fetched_at": "2026-11-13T11:08:22Z",
+  "latest": "2026-11-13T11:27:53Z",
+  "fetched_at": "2026-11-13T11:27:53Z",
   "latest_feed_count": 0,
   "feed_status": "ok_empty",
-  "items": []
+  "history_status": "ok",
+  "history_latest_count": 2,
+  "history_source": "https://azure.status.microsoft/en-us/status/history",
+  "items": [
+    {
+      "id": "pir:7Q30-010",
+      "tracking_id": "7Q30-010",
+      "title": "Post Incident Review (PIR) – Network Connectivity – Gateway service degradation in multiple regions",
+      "description": "Between 20:30 UTC on 30 September 2026 and 02:15 UTC on 1 October 2026, customers using several Azure networking services – including Azure ExpressRoute Gateway, Azure Application Gateway, Azure Firewall, Azure Bastion, Azure Virtual WAN, and Azure VPN Gateway – experienced intermittent failures when performing service management operations. In addition, a subset of upgraded Azure ExpressRoute gateways could not retrieve their required configuration from the control plane service, resulting in temporary connectivity loss. Customers using Azure VMware Solution may also have temporarily lost network connectivity to their software-defined datacenter environments. The issue affected multiple regions including Australia Central 2, Australia Southeast, Austria East, Belgium Central, Canada East, Central US, Chile Central, Denmark East, East Asia, France Central, Germany North, Germany West Central, India South Central, Indonesia Central, Japan West, Jio India Central, Korea Central, Malaysia West, North Europe, Norway West, South Africa North, South Central US, South India, Southeast Asia, Sweden South, Switzerland North, Taiwan North, UAE North, UK South, West Europe, West US, West US 2, and West US 3. The issue began when a platform-triggered gateway update resumed across multiple regions, increasing request volume to the regional gateway control plane service, thereby affecting its ability to process management operations reliably. Impact times varied region by region, as the issue was triggered by a rolling update moving through the regions. We paused this update while applying a configuration change in phases to restore the control plane service. The last wave of customer impact was mitigated at 02:15 UTC on 1 October 2026.",
+      "link": "https://azure.status.microsoft/en-us/status/history",
+      "when": "2026-09-30T00:00:00Z",
+      "italy": false,
+      "germany": true,
+      "source": "Azure Status History (PIR pubblica)",
+      "kind": "pir",
+      "impact_minutes": null,
+      "impact_precision": "not_region_specific"
+    },
+    {
+      "id": "pir:7QL5-Z50",
+      "tracking_id": "7QL5-Z50",
+      "title": "Post Incident Review (PIR) – Azure OpenAI Service, Foundry Agent Service, Foundry Models, and Azure AI services – Intermittent request failures and latency in Sweden Central",
+      "description": "Between 10:03 UTC and 15:58 UTC on 29 September 2026, a platform issue resulted in impact to Azure OpenAI Service, Foundry Agent Service, Foundry Models, and Azure AI services in the Sweden Central region. Impacted customers experienced intermittent request failures, increased latency, and/or HTTP 500 and 503 errors when submitting requests to affected models and data plane APIs hosted in this region. Note that the Azure OpenAI Service processes customer requests through model engines deployed across multiple Azure regions and supported by traffic routing systems. Depending on the selected deployment model (Global, Data Zone, or Regional), note that requests may be routed across multiple Azure regions within defined geographic boundaries to support availability and resilience, while customer data remains stored at rest in the selected Azure region. Learn more at: https://azure.microsoft.com/blog/enterprise-trust-in-azure-openai-service-strengthened-with-data-zones/",
+      "link": "https://azure.status.microsoft/en-us/status/history",
+      "when": "2026-09-29T00:00:00Z",
+      "italy": false,
+      "germany": false,
+      "source": "Azure Status History (PIR pubblica)",
+      "kind": "pir",
+      "impact_minutes": null,
+      "impact_precision": "not_region_specific"
+    }
+  ]
 }
