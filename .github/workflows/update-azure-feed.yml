@@ -71,6 +71,36 @@ jobs:
           for hit in list(re.finditer('statushistoryapi|startDate|endDate',body,re.I))[:8]:
               print('HTML SEARCH',repr(body[max(0,hit.start()-100):hit.end()+200]))
           PY
+      - name: Probe specific public Azure history dates
+        run: |
+          python - <<'PY'
+          import urllib.request,urllib.parse,re
+          base='https://azure.status.microsoft/en-us/statushistoryapi/'
+          vals=[
+            {'startDate':'07/01/2026','page':'1'},
+            {'startDate':'2026-07-01','page':'1'},
+            {'startDate':'07/2026','page':'1'},
+            {'startDate':'2026-07','page':'1'},
+            {'startDate':'01/01/2025','page':'1'},
+            {'startDate':'2025-01-01','page':'1'},
+            {'startDate':'2026-07-01','page':'0'},
+            {'serviceSlug':'','regionSlug':'','startDate':'07/01/2026','page':'1'},
+            {'serviceSlug':'all','regionSlug':'all','startDate':'07/01/2026','page':'1'},
+            {'page':'1'}
+          ]
+          for p in vals:
+              q=urllib.parse.urlencode(p)
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(base+'?'+q,headers={'User-Agent':'Mozilla/5.0'}),timeout=12) as r:
+                      body=r.read(500000).decode('utf-8','replace')
+                  ids=re.findall(r'Tracking\s*ID\s*:\s*([A-Z0-9_-]+)',re.sub(r'<[^>]+>',' ',body),re.I)
+                  print('DATE',q,'len',len(body),'ids',len(ids),ids[:5], 'july', 'July 2026' in body)
+              except Exception as e: print('DATE ERROR',q,str(e)[:100])
+          with urllib.request.urlopen('https://azure.status.microsoft/en-us/status/history',timeout=15) as r:
+              html=r.read(300000).decode('utf-8','replace')
+          p=html.find('StatusHistoryResults: function')
+          print('STATUS HISTORY JS', html[p:p+1650])
+          PY
       - name: Read public Azure RSS
         run: python scripts/update_feed.py
       - name: Commit archive when changed
