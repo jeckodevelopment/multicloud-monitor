@@ -47,6 +47,30 @@ jobs:
           except Exception as exc:
               print("HISTORY API ERROR",repr(exc))
           PY
+      - name: Probe history filters (public endpoint)
+        run: |
+          python - <<'PY'
+          import urllib.request, urllib.parse, re
+          base='https://azure.status.microsoft/en-us/statushistoryapi/'
+          cases=[
+            '?s', '?s=2026', '?s=2025', '?s=07/2026',
+            '?s=2026-07-01', '?s=07/01/2026',
+            '?s=&e=', '?s=&page=2', '?s=&startDate=2025-01-01',
+          ]
+          for q in cases:
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(base+q,headers={'User-Agent':'Mozilla/5.0'}),timeout=12) as r:
+                      raw=r.read(1000000).decode('utf-8','replace')
+                  ids=re.findall(r'Tracking\s*ID\s*:\s*([A-Z0-9_-]+)',re.sub(r'<[^>]+>',' ',raw),re.I)
+                  print('FILTER',repr(q),'len',len(raw),'ids',len(ids),'first',ids[:3], 'July?', 'July 2026' in raw)
+              except Exception as e: print('FILTER ERROR',repr(q),repr(e))
+          page='https://azure.status.microsoft/en-us/status/history'
+          with urllib.request.urlopen(page, timeout=20) as r:
+              body=r.read(200000).decode('utf-8','replace')
+          print('SCRIPTS',re.findall(r'<script[^>]+src=["\']([^"\']+)',body,re.I)[-25:])
+          for hit in list(re.finditer('statushistoryapi|startDate|endDate',body,re.I))[:8]:
+              print('HTML SEARCH',repr(body[max(0,hit.start()-100):hit.end()+200]))
+          PY
       - name: Read public Azure RSS
         run: python scripts/update_feed.py
       - name: Commit archive when changed
