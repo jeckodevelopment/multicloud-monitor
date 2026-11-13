@@ -5,7 +5,7 @@ import re
 from html.parser import HTMLParser
 
 HISTORY_URL = 'https://azure.status.microsoft/en-us/status/history'
-TRACKING = re.compile(r'\bTracking\s*ID\s*:\s*([A-Z0-9]{3,}-[A-Z0-9]{2,})\b', re.I)
+TRACKING = re.compile(r'\bTracking\s*ID\s*:\s*([A-Z0-9_]{3,}-[A-Z0-9_]{2,})\b', re.I)
 DATE = re.compile(r'\b(\d{1,2}/\d{1,2}/20\d{2})\b')
 
 class TextExtractor(HTMLParser):
@@ -60,7 +60,7 @@ def parse_history(raw_html):
         germany=bool(re.search(r'\bgermany west central\b|\bgermanywestcentral\b|\bfrankfurt\b',region_scope))
         incidents.append({
             'id':'pir:'+tracking, 'tracking_id':tracking,'title':title,'description':impact,
-            'link':HISTORY_URL,'when':date,'italy':italy,'germany':germany,
+            'link':HISTORY_URL+'/?trackingId='+tracking,'when':date,'italy':italy,'germany':germany,
             'source':'Azure Status History (PIR pubblica)','kind':'pir',
             'impact_minutes':None,'impact_precision':'not_region_specific',
         })
