@@ -11,7 +11,11 @@ import re
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from history import HISTORY_URL, parse_history
+try:
+    from scripts.history import HISTORY_URL, parse_history
+except ModuleNotFoundError:
+    # Running as `python scripts/update_feed.py` places scripts/ on sys.path.
+    from history import HISTORY_URL, parse_history
 
 SOURCE = "https://rssfeed.azure.status.microsoft/en-us/status/feed/"
 OUTPUT = Path(__file__).resolve().parents[1] / "docs" / "azure-feed.json"
