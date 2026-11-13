@@ -11,6 +11,7 @@ import re
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from history import HISTORY_URL, parse_history
 
 SOURCE = "https://rssfeed.azure.status.microsoft/en-us/status/feed/"
 OUTPUT = Path(__file__).resolve().parents[1] / "docs" / "azure-feed.json"
@@ -78,9 +79,26 @@ def main():
     # Un feed RSS valido puo essere vuoto: non e un errore e non cancella lo storico.
 
     old = json.loads(OUTPUT.read_text(encoding="utf-8")) if OUTPUT.exists() else {}
+    # History acquisition is independent: never discard a successful RSS read.
+    historic = []
+    history_status = "ok"
+    try:
+        history_req = urllib.request.Request(
+            HISTORY_URL, headers={"User-Agent": "MulticloudMonitor/1.0 (public Azure PIR reader)"})
+        with urllib.request.urlopen(history_req, timeout=30) as response:
+            if response.status != 200:
+                raise RuntimeError(f"Azure history HTTP {response.status}")
+            historic = parse_history(response.read(12_000_000))
+        if not historic:
+            history_status = "no_pirs_extracted"
+            print("WARNING: No PIRs extracted from history page; retaining archived data.")
+    except Exception as exc:
+        history_status = "fetch_error"
+        print(f"WARNING: History acquisition failed ({type(exc).__name__}): {exc}")
+
     by_id = {item["id"]: item for item in old.get("items", [])
              if isinstance(item, dict) and item.get("id")}
-    for item in incoming:
+    for item in incoming + historic:
         by_id[item["id"]] = item
 
     timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
@@ -91,11 +109,14 @@ def main():
         "fetched_at": timestamp,
         "latest_feed_count": len(incoming),
         "feed_status": "ok_empty" if not incoming else "ok",
+        "history_status": history_status,
+        "history_latest_count": len(historic),
+        "history_source": HISTORY_URL,
         "items": sorted(by_id.values(), key=lambda item: item.get("when", ""), reverse=True),
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Nuovi nel feed: {len(incoming)}; archivio totale: {len(by_id)}")
+    print(f"RSS: {len(incoming)}; PIRs: {len(historic)}; history status: {history_status}; total: {len(by_id)}")
 
 
 if __name__ == "__main__":
