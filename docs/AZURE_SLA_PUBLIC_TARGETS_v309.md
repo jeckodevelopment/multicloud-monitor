@@ -37,3 +37,20 @@ La versione HTML v3.0.9 è distribuita separatamente come file locale, non è in
 - SLA Azure: ricerca per servizio, visualizzazione target pubblici e delle varianti, selezioni persistenti, export JSON.
 - PDF Azure: target configurazioni selezionate; nessuna falsa stima di downtime da PIR con date senza orario.
 - Tab GCP: HTML, motore JS e report PDF senza modifiche.
+
+## Estensione v3.1.4 — Application Gateway
+
+Fonte Microsoft ufficiale: https://learn.microsoft.com/en-us/azure/application-gateway/overview-v2 e criteri di affidabilità https://learn.microsoft.com/en-us/azure/reliability/reliability-application-gateway-v2
+
+| Servizio | Variante | Target pubblico | Condizioni e limiti |
+|---|---|---:|---|
+| Azure Application Gateway v2 | Basic (preview) | 99,9% | SKU preview, applicabilità contrattuale da verificare |
+| Azure Application Gateway v2 | Standard_v2 | 99,95% | Gateway configurato correttamente, con autoscale o ridondanza di zona secondo la documentazione Microsoft |
+
+Nel file HTML locale **v3.1.4** la variante `Standard_v2` è selezionata come riferimento pubblico, modificabile e *non* confermata per il deployment aziendale. Il catalogo copre così 16 prodotti canonici con almeno una variante SLA. Il report Azure usa adesso lo stesso linguaggio grafico e le stesse sezioni del PDF Google v2.9, mantenendo `n.d.` per minuti e disponibilità non supportati dalle evidenze pubbliche. Il modulo Google non cambia.
+
+### Collaudo
+- Verificare entrambe le varianti Application Gateway e la selezione predefinita unica.
+- Generare un report Azure con 16 SLA: quattro pagine A4 landscape nel caso di test, con cover executive, due region e metodologia.
+- Verificare che gli eventi PIR abbiano una data senza finto orario di disservizio e che le durate rimangano `n.d.`.
+- Verificare il report Google precedente senza regressioni.
