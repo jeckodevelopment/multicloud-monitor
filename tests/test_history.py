@@ -21,6 +21,15 @@ class HistoryTests(unittest.TestCase):
         self.assertIsNone(items[0]["impact_minutes"])
         self.assertFalse(items[1]["germany"])
 
+    def test_tracking_id_with_underscore(self):
+        page = """<h2>February 2026</h2><p>02/07/2026</p>
+        <h3>Post Incident Review (PIR) - Power event</h3>
+        <p>Tracking ID: _SVS-5_G</p><h4>What happened?</h4>
+        <p>West US impacted.</p><h4>What went wrong and why?</h4>"""
+        result = parse_history(page)
+        self.assertEqual(result[0]["id"], "pir:_SVS-5_G")
+        self.assertIn("trackingId=_SVS-5_G", result[0]["link"])
+
     def test_html_without_pirs(self):
         self.assertEqual(parse_history("<html><body>No incidents</body></html>"), [])
 
