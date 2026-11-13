@@ -6,6 +6,7 @@ on:
     paths:
       - 'scripts/**'
       - 'tests/**'
+      - 'docs/azure-history-seeds.json'
       - '.github/workflows/update-azure-feed.yml'
   workflow_dispatch:
   schedule:
