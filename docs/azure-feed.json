@@ -1,0 +1,9 @@
+{
+  "format": "azure-feed-v1",
+  "source": "https://rssfeed.azure.status.microsoft/en-us/status/feed/",
+  "latest": "2026-11-13T11:08:22Z",
+  "fetched_at": "2026-11-13T11:08:22Z",
+  "latest_feed_count": 0,
+  "feed_status": "ok_empty",
+  "items": []
+}
