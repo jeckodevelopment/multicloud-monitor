@@ -54,3 +54,24 @@ Nel file HTML locale **v3.1.4** la variante `Standard_v2` è selezionata come ri
 - Generare un report Azure con 16 SLA: quattro pagine A4 landscape nel caso di test, con cover executive, due region e metodologia.
 - Verificare che gli eventi PIR abbiano una data senza finto orario di disservizio e che le durate rimangano `n.d.`.
 - Verificare il report Google precedente senza regressioni.
+
+## Estensione v3.1.7 — Azure Firewall
+
+Fonte Microsoft: https://learn.microsoft.com/en-us/azure/firewall/deploy-availability-zone-powershell
+
+| Prodotto | Variante | SLA pubblico | Condizioni |
+|---|---|---:|---|
+| Azure Firewall | Regional | 99,95% | Deployment regionale in region senza Availability Zones |
+| Azure Firewall | Zone redundant | 99,99% | Deployment su almeno **due** Availability Zones |
+
+La v3.1.7 aggiunge una variante preselezionata *solo come valore di riferimento*. Non è possibile derivare dalla lista servizi quale topologia sia effettivamente utilizzata in Italy North o Germany West Central. In particolare, la variante regionale non costituisce una garanzia applicabile a qualunque deployment in una region che supporta zone. La scelta deve essere verificata rispetto all'infrastruttura.
+
+La dashboard ora mappa **17 servizi canonici** con SLA pubblico, non 17 voci necessariamente distinte in inventario. Restano servizi da qualificare, inclusi quelli con condizioni contrattuali particolari.
+
+### Verifiche v3.1.7
+
+- Apertura HTML locale e preselezione Azure Firewall.
+- Due alternative nella configurazione SLA, con selezione mutuamente esclusiva.
+- PDF Azure con pagina autonoma per registro incidenti Italy North e per Germany West Central.
+- GCP e relativo layout PDF invariati.
+- Non usare il PDF pubblico per dedurre minuti di downtime dai soli timestamp PIR.
