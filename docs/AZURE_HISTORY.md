@@ -25,3 +25,13 @@ On any history failure the collector continues updating RSS and **retains** prio
 
 ## Testing
 Run \`python -m unittest discover -s tests -v\`. Verify \`history_status\` and \`history_latest_count\` after the next workflow. Confirm entries with \`id:pir:...\` in \`docs/azure-feed.json\`, and that they appear in the Azure dashboard. No GCP module changes.
+
+
+## Historical backfill from official PIR tracking IDs
+The public history page's default HTML contains only the most recent PIRs. Some earlier incidents remain accessible through the official URL \`https://azure.status.microsoft/en-us/status/history/?trackingId=ID\`.
+
+The curated public identifiers in \`docs/azure-history-seeds.json\` are routing references only. The script imports the incident description, region indications and date **exclusively from Microsoft's page**. Existing records are skipped on subsequent runs; each ID is imported only once and deduplicated with the live collection.
+
+The seed list does not imply comprehensive coverage. Source notices are not customer-specific SLA proof; all historic entries retain \`impact_minutes: null\`. A failed or missing tracking ID is reported in \`history_seed_failures\` and is never invented.
+
+Review the official PIR before adding a new ID to the seed list.
