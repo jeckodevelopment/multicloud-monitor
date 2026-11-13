@@ -101,6 +101,25 @@ jobs:
           p=html.find('StatusHistoryResults: function')
           print('STATUS HISTORY JS', html[p:p+1650])
           PY
+      - name: Probe individual public PIR pages
+        run: |
+          python - <<'PY'
+          import urllib.request,urllib.parse,re
+          base='https://azure.status.microsoft/en-us/status/history'
+          urls=[
+            base+'/?trackingId=FNJ8-VQZ',
+            base+'/?trackingId=ZJV6-SGG',
+            'https://azure.status.microsoft/en-us/statushistoryapi/?trackingId=FNJ8-VQZ',
+            'https://azure.status.microsoft/en-us/statushistoryapi/?shdrefreshflag=true&startDate=2026-07-01&page=1',
+          ]
+          for url in urls:
+              try:
+                  with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'}),timeout=15) as r:
+                      body=r.read(400000).decode('utf-8','replace')
+                  ids=re.findall(r'Tracking\s*ID\s*:\s*([A-Z0-9_-]+)',re.sub(r'<[^>]+>',' ',body),re.I)
+                  print('DIRECT',url,'len',len(body),'ids',len(ids),ids[:8])
+              except Exception as e: print('DIRECT ERROR',repr(e))
+          PY
       - name: Read public Azure RSS
         run: python scripts/update_feed.py
       - name: Commit archive when changed
