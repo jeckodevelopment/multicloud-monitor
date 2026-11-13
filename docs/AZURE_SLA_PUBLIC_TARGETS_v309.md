@@ -75,3 +75,36 @@ La dashboard ora mappa **17 servizi canonici** con SLA pubblico, non 17 voci nec
 - PDF Azure con pagina autonoma per registro incidenti Italy North e per Germany West Central.
 - GCP e relativo layout PDF invariati.
 - Non usare il PDF pubblico per dedurre minuti di downtime dai soli timestamp PIR.
+
+## Estensione v3.1.8 — Varianti SLA multiple e topologia intra-region
+
+La selezione delle varianti SLA **non è più mutuamente esclusiva** per servizio canonico in Azure. Lo stesso servizio può comprendere istanze con deployment diversi; nel PDF ogni variante selezionata occupa una propria riga. La selezione salvata è migrata al formato `multicloud-azure-sla-selections-v5` senza perdere le scelte precedenti.
+
+**Impostazioni predefinite del perimetro dichiarato:**
+
+| Servizio | Varianti contemporaneamente attive | Target pubblico |
+|---|---|---:|
+| Azure Virtual Machines | VM singola con disco Premium SSD / Ultra / Premium SSD v2 | 99,9% |
+| Azure Virtual Machines | Almeno due VM in Availability Set, nella stessa region | 99,95% |
+| Azure Database for PostgreSQL Flexible Server | Senza HA, server singolo | 99,9% |
+| Azure Database for PostgreSQL Flexible Server | HA same-zone (standby nella stessa zona e region) | 99,95% |
+
+La configurazione multi-region per Azure Cosmos DB **non è preselezionata**, perché il perimetro dell'utente comprende solo ridondanza interna a una singola region. Qualsiasi valore SLA dipende comunque dalla configurazione reale, che il monitor pubblico non può leggere.
+
+**Google Cloud SQL** ha invece due varianti HA supportate dalla fonte pubblica, entrambe attive: Enterprise HA (99,95%) ed Enterprise Plus HA (99,99%). La documentazione SLA ufficiale non fornisce in quella tabella un obiettivo contrattuale per istanze Cloud SQL prive di HA: **non attribuire loro un valore SLA inventato**.
+
+Fonti:
+- https://learn.microsoft.com/en-us/azure/postgresql/configure-maintain/quickstart-create-server
+- https://cloud.google.com/sql/sla
+- https://cloud.google.com/compute/sla
+
+### Report direzionale Azure
+La frase "Il registro incidenti della region è riportato nella pagina successiva, per evitare interruzioni fra le tabelle SLA e gli eventi." è stata rimossa. I registri Italy North e Germany West Central continuano a iniziare ciascuno su una pagina dedicata.
+
+### Comportamenti da collaudare
+- [ ] Prima apertura: VM singola e Availability Set selezionate contemporaneamente.
+- [ ] PostgreSQL Flexible Server: senza HA e HA same-zone selezionate contemporaneamente.
+- [ ] Una terza variante dello stesso servizio si può selezionare senza deselezionare le prime.
+- [ ] Le selezioni persistenti precedenti sono migrate al nuovo formato.
+- [ ] PDF Azure con varianti multiple e pagine di registro incidenti separate, senza frase di rinvio.
+- [ ] Google Cloud SQL: Enterprise HA 99,95% e Enterprise Plus HA 99,99% attive contemporaneamente; nessun target assegnato arbitrariamente a Cloud SQL senza HA.
