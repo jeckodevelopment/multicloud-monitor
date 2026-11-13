@@ -102,6 +102,38 @@ def main():
 
     by_id = {item["id"]: item for item in old.get("items", [])
              if isinstance(item, dict) and item.get("id")}
+
+    # Backfill selected *publicly identified* PIRs by their Microsoft Tracking ID.
+    # Microsoft serves each historical PIR at /status/history/?trackingId=...
+    seed_file = OUTPUT.parent / "azure-history-seeds.json"
+    seeds = json.loads(seed_file.read_text(encoding="utf-8"))["tracking_ids"] if seed_file.exists() else []
+    seed_imported = 0
+    seed_failures = 0
+    known_ids = set(by_id) | {item["id"] for item in historic}
+    for tracking in seeds[:25]:
+        key = "pir:" + tracking.upper()
+        if key in known_ids:
+            continue
+        if not __import__("re").fullmatch(r"[A-Z0-9_]{3,}-[A-Z0-9_]{2,}", tracking, __import__("re").I):
+            seed_failures += 1
+            continue
+        from urllib.parse import quote
+        link = HISTORY_URL + "/?trackingId=" + quote(tracking, safe="")
+        try:
+            request = urllib.request.Request(link, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(request, timeout=20) as response:
+                if response.status != 200:
+                    raise RuntimeError(f"HTTP {response.status}")
+                parsed = parse_history(response.read(1500000))
+            matching = [item for item in parsed if item["id"].upper() == key.upper()]
+            if len(matching) != 1:
+                raise RuntimeError("Tracking ID not uniquely present in official response")
+            historic.append(matching[0])
+            known_ids.add(key)
+            seed_imported += 1
+        except Exception as exc:
+            seed_failures += 1
+            print(f"WARNING: historical seed {tracking}: {type(exc).__name__}: {exc}")
     for item in incoming + historic:
         by_id[item["id"]] = item
 
@@ -116,11 +148,14 @@ def main():
         "history_status": history_status,
         "history_latest_count": len(historic),
         "history_source": HISTORY_URL,
+        "history_seed_imported": seed_imported,
+        "history_seed_failures": seed_failures,
+        "history_seed_total": len(seeds),
         "items": sorted(by_id.values(), key=lambda item: item.get("when", ""), reverse=True),
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"RSS: {len(incoming)}; PIRs: {len(historic)}; history status: {history_status}; total: {len(by_id)}")
+    print(f"RSS: {len(incoming)}; PIRs: {len(historic)}; seeds added: {seed_imported}; seed failures: {seed_failures}; history status: {history_status}; total: {len(by_id)}")
 
 
 if __name__ == "__main__":
