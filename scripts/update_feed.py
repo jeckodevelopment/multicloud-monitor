@@ -37,6 +37,9 @@ def parse_date(value):
 
 def parse_feed(xml_bytes):
     root = ET.fromstring(xml_bytes)
+    root_name = root.tag.split("}")[-1].lower()
+    if root_name not in ("rss", "rdf", "feed"):
+        raise RuntimeError(f"Formato XML inatteso: {root_name}")
     entries = []
     for node in root.iter():
         if node.tag.split("}")[-1].lower() != "item":
@@ -72,8 +75,7 @@ def main():
         xml_bytes = response.read(8_000_000)
 
     incoming = parse_feed(xml_bytes)
-    if not incoming:
-        raise RuntimeError("Feed senza eventi: archivio precedente conservato")
+    # Un feed RSS valido puo essere vuoto: non e un errore e non cancella lo storico.
 
     old = json.loads(OUTPUT.read_text(encoding="utf-8")) if OUTPUT.exists() else {}
     by_id = {item["id"]: item for item in old.get("items", [])
@@ -87,6 +89,8 @@ def main():
         "source": SOURCE,
         "latest": timestamp,
         "fetched_at": timestamp,
+        "latest_feed_count": len(incoming),
+        "feed_status": "ok_empty" if not incoming else "ok",
         "items": sorted(by_id.values(), key=lambda item: item.get("when", ""), reverse=True),
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
