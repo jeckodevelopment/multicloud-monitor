@@ -24,7 +24,7 @@ https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-O
 
 ## Dashboard HTML v3.0.9
 
-La nuova dashboard locale visualizza **14 prodotti canonici** con almeno una configurazione mappata (inclusi i 5 originali e 9 aggiuntivi), con alias di inventario visualizzati separatamente ma non conteggiati due volte. I servizi senza target ancora verificato riportano la dicitura breve “Target pubblico in verifica” e il link alla fonte. Le voci commerciali, di billing o sottoposte ad altro accordo non ricevono un SLA tecnico fittizio.
+La nuova dashboard locale visualizza **15 prodotti canonici** con almeno una configurazione mappata (inclusi i 5 originali e 10 aggiuntivi), con alias di inventario visualizzati separatamente ma non conteggiati due volte. I servizi senza target ancora verificato riportano la dicitura breve “Target pubblico in verifica” e il link alla fonte. Le voci commerciali, di billing o sottoposte ad altro accordo non ricevono un SLA tecnico fittizio.
 
 L'acquisizione Azure appare come barra compatta con indicatore di salute della lettura del JSON; URL, import manuale e backup sono accessibili da un accordion. Lo stato verde indica **acquisizione riuscita e recente**, non uptime dei workload Azure.
 
