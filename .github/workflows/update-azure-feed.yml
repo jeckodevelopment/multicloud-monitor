@@ -1,6 +1,12 @@
 name: Update public Azure feed
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/update-azure-feed.yml'
   workflow_dispatch:
   schedule:
     - cron: '17,47 * * * *'
