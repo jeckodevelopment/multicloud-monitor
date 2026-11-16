@@ -10,7 +10,7 @@ on:
       - '.github/workflows/update-azure-feed.yml'
   workflow_dispatch:
   schedule:
-    - cron: '13,43 * * * *'
+    - cron: '17 7 * * 2,4,6'
 
 permissions:
   contents: write
@@ -32,7 +32,7 @@ jobs:
         run: |
           echo "Trigger: ${{ github.event_name }}"
           echo "UTC: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-          echo "Expected cadence: 30 minutes (minute 13 and 43 UTC)"
+          echo "Expected cadence: Tuesday, Thursday, Saturday at 07:17 UTC (2–3 days)"
       - name: Verify RSS parser
         run: python -m unittest discover -s tests -v
       - name: Read public Azure RSS
