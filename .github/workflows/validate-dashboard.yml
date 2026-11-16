@@ -1,0 +1,30 @@
+name: Validate standalone dashboard
+
+on:
+  pull_request:
+    paths:
+      - 'dashboard/**'
+      - 'tests/test_dashboard_release.py'
+      - '.github/workflows/validate-dashboard.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'dashboard/**'
+      - 'tests/test_dashboard_release.py'
+      - '.github/workflows/validate-dashboard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate embedded JavaScript, GCP integrity, inventory and PDF contract
+        run: python -m unittest discover -s tests -p 'test_dashboard_release.py' -v
