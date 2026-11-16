@@ -4,6 +4,8 @@ Dashboard **Google Cloud + Microsoft Azure** in un unico file HTML, utilizzabile
 
 ## Dashboard — versione 3.1.10
 
+**Baseline stabile approvata il 16 novembre 2026**, dopo collaudo funzionale confermato dall'utilizzatore. Vedi [note di rilascio e accettazione](docs/RELEASE_v3.1.10.md). La versione HTML resta congelata; le correzioni future utilizzeranno nuovi file versionati.
+
 **[Scarica il file HTML v3.1.10](dashboard/cloud_service_monitor_multicloud_v3_1_10.html)**
 
 1. Apri il file nella repository e usa **Download raw file** (oppure scaricalo dal link sopra).
