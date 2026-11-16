@@ -15,8 +15,8 @@ class DashboardReleaseTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.html = HTML.read_text(encoding="utf-8")
-        cls.scripts = re.findall(r"<script\\b[^>]*>(.*?)</script>", cls.html, re.S | re.I)
-        m = re.search(r"const AZURE_SLA_CATALOG\\s*=\\s*(\\[.*?\\]);", cls.html, re.S)
+        cls.scripts = re.findall(r"<script\b[^>]*>(.*?)</script>", cls.html, re.S | re.I)
+        m = re.search(r"const AZURE_SLA_CATALOG\s*=\s*(\[.*?\]);", cls.html, re.S)
         if m is None:
             raise AssertionError("Azure SLA catalog missing")
         cls.catalog = json.loads(m.group(1))
