@@ -2,9 +2,9 @@
 
 Dashboard **Google Cloud + Microsoft Azure** in un unico file HTML, utilizzabile localmente su Windows 11 (e altri browser desktop) senza server web locale, installazione o credenziali dei cloud provider.
 
-## Dashboard — versione 3.1.9
+## Dashboard — versione 3.1.10
 
-**[Scarica il file HTML v3.1.9](dashboard/cloud_service_monitor_multicloud_v3_1_9.html)**
+**[Scarica il file HTML v3.1.10](dashboard/cloud_service_monitor_multicloud_v3_1_10.html)**
 
 1. Apri il file nella repository e usa **Download raw file** (oppure scaricalo dal link sopra).
 2. Salvalo sul tuo PC e aprilo con un browser moderno (`file://`).
@@ -33,7 +33,7 @@ GitHub Actions legge il feed RSS di Azure Status, raccoglie le PIR storiche uffi
 - Feed JSON: [`docs/azure-feed.json`](docs/azure-feed.json)
 - Fonti: https://rssfeed.azure.status.microsoft/en-us/status/feed/ e https://azure.status.microsoft/
 
-La schedulazione GitHub Actions è configurata su due slot all'ora. GitHub può ritardare o saltare le esecuzioni: controllare `fetched_at` e lo stato del workflow prima di utilizzare i dati. L'assenza di eventi nel feed **non** implica disponibilità del 100%.
+La schedulazione GitHub Actions è configurata **martedì, giovedì e sabato alle 07:17 UTC**, con intervalli previsti di 2–3 giorni. La dashboard segnala una fonte non recente quando l'ultimo `fetched_at` supera **4 giorni**; la soglia ammette ritardi della schedulazione GitHub. GitHub può comunque ritardare o saltare le esecuzioni: controllare `fetched_at` e lo stato del workflow prima di utilizzare i dati. L'assenza di eventi nel feed **non** implica disponibilità del 100%.
 
 ## Versioni e manutenzione
 

@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-HTML = ROOT / "dashboard/cloud_service_monitor_multicloud_v3_1_9.html"
+HTML = ROOT / "dashboard/cloud_service_monitor_multicloud_v3_1_10.html"
 GCP_SCRIPT_SHA256 = "8e16759e77f24c59f91fa78a32330fefa7ec80c80594cc47aa8beb8eee3315b7"
 
 class DashboardReleaseTests(unittest.TestCase):
@@ -46,6 +46,11 @@ class DashboardReleaseTests(unittest.TestCase):
         for phrase in ("Italy North", "Germany West Central", "Disponibilità stimata*", "Non calc."):
             self.assertIn(phrase, self.html)
         self.assertNotIn("Il registro incidenti della region è riportato nella pagina successiva", self.html)
+
+    def test_azure_refresh_matches_periodic_cadence(self):
+        self.assertIn("age>5760", self.html)
+        self.assertNotIn("age>120;", self.html)
+        self.assertIn("fonte non recente", self.html)
 
     def test_node_syntax_for_embedded_scripts(self):
         with tempfile.TemporaryDirectory() as tmp:
