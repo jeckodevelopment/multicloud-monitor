@@ -46,3 +46,10 @@ La v3.1.9 conserva:
 ## Test automatici
 
 La workflow `Validate standalone dashboard` esegue `tests/test_dashboard_release.py`: integrità script Google, struttura pannelli e PDF, conteggi dei 72 servizi e parsing/sintassi JavaScript con Node. Questa è una **protezione minima contro regressioni statiche**, non un collaudo end-to-end né una verifica della correttezza contrattuale di ciascuno SLA.
+
+
+## Aggiornamento requisito 16 novembre 2026 — periodicità Azure
+
+Il requisito di raccolta ogni 30 minuti è **superato**: la dashboard viene consultata periodicamente per report direzionali, non come monitor in tempo reale. La nuova pianificazione è **martedì, giovedì e sabato alle 07:17 UTC**, con intervallo nominale 2–3 giorni. L'HTML v3.1.10 considera obsoleta una fonte solo oltre **4 giorni** dall'ultimo `fetched_at`. Restano disponibili il refresh manuale e la distinzione tra SLA pubblici e disponibilità stimata.
+
+I test statici puntano ora alla v3.1.10. Il controllo su PC aziendale resta necessario; Google Cloud e relativo report PDF rimangono invariati.
